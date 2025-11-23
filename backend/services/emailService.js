@@ -31,7 +31,7 @@ const sendOtpToEmail = async (email, otp) => {
 
   try {
     await resend.emails.send({
-      from: "WhatsApp Web <no-reply@yourapp.com>",  
+      from: "Acme <onboarding@resend.dev>",  
       to: email,
       subject: "Your WhatsApp Web OTP Code",
       html: html,
