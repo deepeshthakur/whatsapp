@@ -1,27 +1,11 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 const dotenv = require("dotenv");
 dotenv.config();
 
-// Create a test account or replace with real credentials.
-const transporter = nodemailer.createTransport({
- service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER, // generated ethereal user
-    pass: process.env.EMAIL_PASS, // generated ethereal password
-  },
-});
-
-
-transporter.verify((error, success) => {
-    if (error) {
-        console.error("Error with email transporter:", error);
-    } else {
-        console.log("Email transporter is ready to send messages");
-    }
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendOtpToEmail = async (email, otp) => {
-      const html = `
+  const html = `
     <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
       <h2 style="color: #075e54;">🔐 WhatsApp Web Verification</h2>
       
@@ -44,13 +28,20 @@ const sendOtpToEmail = async (email, otp) => {
       <small style="color: #777;">This is an automated message. Please do not reply.</small>
     </div>
   `;
-  await transporter.sendMail({
-    from: `"WhatsApp Web" <${process.env.EMAIL_USER}>`, // sender address
-    to: email, // list of receivers
-    subject: "Your WhatsApp Web OTP Code", // Subject line
-    html: html, // html body
-  });
-}
 
+  try {
+    await resend.emails.send({
+      from: "WhatsApp Web <no-reply@yourapp.com>",  
+      to: email,
+      subject: "Your WhatsApp Web OTP Code",
+      html: html,
+    });
+
+    console.log("OTP sent to email:", email);
+  } catch (error) {
+    console.error("Email sending failed:", error);
+    throw error;
+  }
+};
 
 module.exports = sendOtpToEmail;
