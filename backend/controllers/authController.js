@@ -97,7 +97,7 @@ const verifyPhoneOtp = async (req, res) => {
       maxAge: 35 * 24 * 60 * 60 * 1000
     });
 
-    return response(res, 200, "OTP verified successfully", { user, Token });
+    return response(res, 200, "OTP verified successfully", { user, token });
 
   } catch (err) {
     console.error(err);
