@@ -4,12 +4,10 @@ dotenv.config();
 
 // Create a test account or replace with real credentials.
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.gmail.com",
-  port: process.env.SMTP_PORT || 587,
-  secure: false, // use TLS
+ service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,  // App Password
+    user: process.env.EMAIL_USER, // generated ethereal user
+    pass: process.env.EMAIL_PASS, // generated ethereal password
   },
 });
 
