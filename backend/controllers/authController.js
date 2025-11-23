@@ -90,7 +90,7 @@ const verifyPhoneOtp = async (req, res) => {
 
     // Generate token after successful verification
     const token = generateToken(user._id);
-    res.cookie("auth_token", Token, {
+    res.cookie("auth_token", token, {
       httpOnly: true,
       secure: true,
       sameSite: 'None',
