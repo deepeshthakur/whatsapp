@@ -56,6 +56,6 @@ app.use("/api/chats", chatRouter);
 app.use("/api/status", statusRoutes);
 // Database connection
 
-server.listen(5000, "127.0.0.1", () => {
-  console.log("Server running on port 5000");
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
 });
