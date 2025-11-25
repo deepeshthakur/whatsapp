@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useLayOutStore from "../../store/LayOutStore";
 import useThemeStore from "../../store/ThemeStore";
 import useUserStore from "../../store/useUserStore";
@@ -10,16 +10,27 @@ const ChatList = ({ contacts }) => {
   const setSelectedContact = useLayOutStore(
     (state) => state.setSelectedContact
   );
-
   const selectedContact = useLayOutStore((state) => state.selectedContact);
   const { theme } = useThemeStore();
   const { user } = useUserStore();
+
   const [searchTerm, setSearchTerm] = useState("");
+
+  // ⭐ FORCE RE-RENDER EVERY 30 SECONDS (WhatsApp-style timestamp update)
+  const [, setTimeUpdater] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeUpdater((t) => t + 1);
+    }, 30000); // Updates every 30 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Filter contacts
   const filteredContacts = contacts?.filter((contact) =>
     contact?.username?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
- 
 
   return (
     <div
@@ -39,10 +50,12 @@ const ChatList = ({ contacts }) => {
           <FaPlus />
         </button>
       </div>
+
+      {/* Search Bar */}
       <div className="p-2">
         <div className="relative">
           <FaSearch
-            className={`absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 ${
+            className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
               theme === "dark" ? "text-gray-400" : "text-gray-800"
             }`}
           />
@@ -59,12 +72,14 @@ const ChatList = ({ contacts }) => {
           />
         </div>
       </div>
-      <div className="overflow-y-auto h-[calc(100vh-120px)] ">
+
+      {/* Chat List */}
+      <div className="overflow-y-auto h-[calc(100vh-120px)]">
         {filteredContacts.map((contact) => (
           <motion.div
-            key={contact?.id}
+            key={contact?._id || contact?.id}
             onClick={() => setSelectedContact(contact)}
-            className={`p-3 flex items-center  cursor-pointer ${
+            className={`p-3 flex items-center cursor-pointer ${
               theme === "dark"
                 ? selectedContact?._id === contact?._id
                   ? "bg-gray-700"
@@ -74,11 +89,13 @@ const ChatList = ({ contacts }) => {
                 : "hover:bg-gray-100"
             }`}
           >
+            {/* Profile Image */}
             <img
               src={contact?.profilePicture}
               alt={contact?.username}
-              className="w-12 h-12 rounded-full "
+              className="w-12 h-12 rounded-full"
             />
+
             <div className="ml-3 flex-1">
               <div className="flex justify-between items-baseline">
                 <h2
@@ -88,6 +105,8 @@ const ChatList = ({ contacts }) => {
                 >
                   {contact?.username}
                 </h2>
+
+                {/* ⭐ Time Automatically Updates */}
                 {contact?.conversation && (
                   <span
                     className={`text-xs ${
@@ -100,15 +119,17 @@ const ChatList = ({ contacts }) => {
                   </span>
                 )}
               </div>
-              <div className="flex justify-between items-baseline ">
+
+              <div className="flex justify-between items-baseline">
                 <p
-                  className={`text-sm ${
+                  className={`text-sm truncate ${
                     theme === "dark" ? "text-gray-400" : "text-gray-600"
-                  } truncate`}
+                  }`}
                 >
                   {contact?.conversation?.lastmessage?.content}
                 </p>
 
+                {/* Unread Count Bubble */}
                 {contact?.conversation &&
                   contact?.conversation?.unreadCount > 0 &&
                   contact.conversation?.lastmessage?.reciever === user?._id && (
