@@ -166,6 +166,19 @@ const Login = () => {
     }
   };
 
+  const handleFullOtpAutoFill = (value) => {
+    if (!value) return;
+
+    const digits = value.split("").slice(0, otp.length);
+    setOtp(digits);
+    setOtpValue("otp", digits.join(""));
+
+    const lastIndex = digits.length - 1;
+    if (lastIndex >= 0) {
+      document.getElementById(`otp-${lastIndex}`).focus();
+    }
+  };
+
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace") {
       if (otp[index] === "") {
@@ -472,6 +485,14 @@ const Login = () => {
                 ? `Enter the OTP sent to ${phoneNumber}`
                 : `Enter the OTP sent to ${email}`}
             </p>
+
+            <input
+              type="text"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              className="absolute opacity-0 pointer-events-none h-0 w-0"
+              onChange={(e) => handleFullOtpAutoFill(e.target.value)}
+            />
             <div className="flex justify-between">
               {otp.map((digit, index) => (
                 <input
@@ -479,7 +500,7 @@ const Login = () => {
                   id={`otp-${index}`}
                   type="text"
                   inputMode="numeric"
-                  onKeyDown={(e)=>handleKeyDown(e,index)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
                   pattern="[0-9]*"
                   maxLength={1}
                   value={digit}
@@ -488,7 +509,7 @@ const Login = () => {
                     theme === "dark"
                       ? "bg-gray-700 border-gray-600 text-white"
                       : "bg-white border-gray-500 text-gray-600"
-                  } rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${
+                  } rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 border-green-400 border-2 ${
                     otpErrors.otp ? "border-red-500" : ""
                   }`}
                 />
