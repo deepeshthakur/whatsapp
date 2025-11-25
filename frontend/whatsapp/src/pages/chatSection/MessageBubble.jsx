@@ -26,7 +26,10 @@ const MessageBubble = ({
   const optionRef = useRef(null);
   const emojiPickerRef = useRef(null);
   const reactionsMenuRef = useRef(null);
-  const isUserMessage = message.sender._id === currentUser?._id;
+  const senderId =
+    typeof message.sender === "string" ? message.sender : message.sender?._id;
+
+  const isUserMessage = senderId === currentUser?._id;
 
   const bubbleClass = isUserMessage ? `chat-end` : `chat-start`;
 
