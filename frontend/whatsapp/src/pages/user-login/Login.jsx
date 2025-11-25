@@ -474,13 +474,7 @@ const Login = () => {
                 : `Enter the OTP sent to ${email}`}
             </p>
 
-            <input
-              type="text"
-              inputMode="numeric"
-              autoComplete="one-time-code"
-              className="absolute opacity-0 pointer-events-none h-0 w-0"
-              onChange={(e) => handleFullOtpAutoFill(e.target.value)}
-            />
+            
             <div className="flex justify-between ">
               {otp.map((digit, index) => (
                 <input
