@@ -493,7 +493,7 @@ const Login = () => {
               className="absolute opacity-0 pointer-events-none h-0 w-0"
               onChange={(e) => handleFullOtpAutoFill(e.target.value)}
             />
-            <div className="flex justify-between">
+            <div className="flex justify-between ">
               {otp.map((digit, index) => (
                 <input
                   key={index}
@@ -507,9 +507,9 @@ const Login = () => {
                   onChange={(e) => handleOtpChange(index, e.target.value)}
                   className={`w-12 h-12 text-center ${
                     theme === "dark"
-                      ? "bg-gray-700 border-gray-600 text-white"
-                      : "bg-white border-gray-500 text-gray-600"
-                  } rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 border-green-400 border-2 ${
+                      ? "bg-gray-700 border-gray-600 border-2 text-white"
+                      : "bg-white border-gray-500 border-2 text-gray-600"
+                  } rounded-md focus:outline-none focus:ring-2 focus:ring-green-500  ${
                     otpErrors.otp ? "border-red-500" : ""
                   }`}
                 />
