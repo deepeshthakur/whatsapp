@@ -35,7 +35,7 @@ const MessageBubble = ({
         theme === "dark" ? "bg-[#144d38] text-white" : "bg-[#DCF8C6] text-black"
       }`
     : `chat-bubble md:max-w-[50%] min-w-[130px] ${
-        theme === "dark" ? "bg-[#144d38] text-white" : "bg-[#DCF8C6] text-black"
+        theme === "dark" ? "bg-[#202c33] text-white" : "bg-white text-black"
       }`;
 
   const quickReactions = ["👍", "❤️", "😂", "😮", "😢", "🙏"];

@@ -166,19 +166,7 @@ const Login = () => {
     }
   };
 
-  const handleFullOtpAutoFill = (value) => {
-    if (!value) return;
-
-    const digits = value.split("").slice(0, otp.length);
-    setOtp(digits);
-    setOtpValue("otp", digits.join(""));
-
-    const lastIndex = digits.length - 1;
-    if (lastIndex >= 0) {
-      document.getElementById(`otp-${lastIndex}`).focus();
-    }
-  };
-
+  
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace") {
       if (otp[index] === "") {
