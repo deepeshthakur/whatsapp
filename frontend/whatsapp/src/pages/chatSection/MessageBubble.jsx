@@ -27,7 +27,7 @@ const MessageBubble = ({
   const emojiPickerRef = useRef(null);
   const reactionsMenuRef = useRef(null);
   const senderId =
-    typeof message.sender === "string" ? message.sender : message.sender?._id;
+    typeof message.sender === "string" ? message.sender : message.sender?._id || "";
 
   const isUserMessage = senderId === currentUser?._id;
 
