@@ -91,7 +91,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { setUser } = useUserStore();
-  const {theme} = useThemeStore();
+  const { theme } = useThemeStore();
   const [loading, setLoading] = useState(false);
 
   const {
@@ -163,6 +163,28 @@ const Login = () => {
       setError(error.message || "failed to send otp");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace") {
+      if (otp[index] === "") {
+        if (index > 0) {
+          document.getElementById(`otp-${index - 1}`).focus();
+        }
+      } else {
+        const newOtp = [...otp];
+        newOtp[index] = "";
+        setOtp(newOtp);
+      }
+    }
+
+    if (e.key === "ArrowLeft" && index > 0) {
+      document.getElementById(`otp-${index - 1}`).focus();
+    }
+
+    if (e.key === "ArrowRight" && index < otp.length - 1) {
+      document.getElementById(`otp-${index + 1}`).focus();
     }
   };
 
@@ -372,8 +394,12 @@ const Login = () => {
                     </div>
                   )}
                 </div>
+                {/* Phone number input (numeric keypad on mobile) */}
                 <input
                   type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={10}
                   {...loginRegister("phoneNumber")}
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
@@ -381,10 +407,9 @@ const Login = () => {
                     theme === "dark"
                       ? "bg-gray-700 border-gray-600 text-white"
                       : "bg-white border-gray-300 text-gray-700"
-                  } rounded-md focus:outline-none focus:right-2 focus:ring-green-500 ${
+                  } rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${
                     LoginErrors.phoneNumber ? "border-red-500" : ""
                   }`}
-                  placeholder="Phone number"
                 />
               </div>
               {LoginErrors.phoneNumber && (
@@ -443,11 +468,9 @@ const Login = () => {
                 theme === "dark" ? "text-gray-300" : "text-gray-600"
               } mb-4`}
             >
-              {
-                phoneNumber ?
-                  `Enter the OTP sent to ${phoneNumber}`
-                  : `Enter the OTP sent to ${email}`
-              }
+              {phoneNumber
+                ? `Enter the OTP sent to ${phoneNumber}`
+                : `Enter the OTP sent to ${email}`}
             </p>
             <div className="flex justify-between">
               {otp.map((digit, index) => (
@@ -455,6 +478,9 @@ const Login = () => {
                   key={index}
                   id={`otp-${index}`}
                   type="text"
+                  inputMode="numeric"
+                  onKeyDown={(e)=>handleKeyDown(e,index)}
+                  pattern="[0-9]*"
                   maxLength={1}
                   value={digit}
                   onChange={(e) => handleOtpChange(index, e.target.value)}
